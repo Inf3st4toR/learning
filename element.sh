@@ -10,12 +10,17 @@ echo "$ARG"
 
 #recover info in database
 # case number
-ELEMENT=$($PSQL "SELECT atomic_number, name, symbol, type, atomic_mass, melting_point_celsius, boiling_point_celsius FROM properties INNER JOIN types USING(type_id) INNER JOIN elements USING(atomic_number) WHERE atomic_number = 1;")
+ELEMENT=$($PSQL "SELECT atomic_number, name, symbol, type, atomic_mass, melting_point_celsius, boiling_point_celsius FROM properties INNER JOIN types USING(type_id) INNER JOIN elements USING(atomic_number) WHERE atomic_number = $ARG;")
 IFS="|" read EL_NB EL_NAME SYMB TYPE MASS MELT_P BOIL_P <<< $ELEMENT
 
-echo "$EL_NB $EL_NAME $SYMB $TYPE $MASS $MELT_P $BOIL_P"
+echo "Int: $EL_NB $EL_NAME $SYMB $TYPE $MASS $MELT_P $BOIL_P"
 
-# case symbol
-# case name
+# case string
+ELEMENT=$($PSQL "SELECT atomic_number, name, symbol, type, atomic_mass, melting_point_celsius, boiling_point_celsius FROM properties INNER JOIN types USING(type_id) INNER JOIN elements USING(atomic_number) WHERE name = '$ARG' OR symbol = '$ARG';")
+IFS="|" read EL_NB EL_NAME SYMB TYPE MASS MELT_P BOIL_P <<< $ELEMENT
+
+echo "String: $EL_NB $EL_NAME $SYMB $TYPE $MASS $MELT_P $BOIL_P"
+
 
 #output information
+
