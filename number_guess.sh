@@ -15,7 +15,21 @@ fi
 
 #Guess number
 RAN_NUM=$((($RANDOM % 1000)+1))
+COUNT=1
 echo -e "\nGuess the secret number between 1 and 1000:"
 read GUESS
 
-echo $GUESS $RAN_NUM
+#Guess Loop
+while [ "$GUESS" -ne "$RAN_NUM" ]; do
+    if [ "$GUESS" -gt "$RAN_NUM" ]; then
+        echo -e "\nIt's lower than that, guess again:"
+        read GUESS
+    else
+        echo -e "\nIt's higher than that, guess again:"
+        read GUESS
+    fi
+    (( COUNT++ ))
+done
+
+echo -e "You guessed it in $COUNT tries. The secret number was $RAN_NUM. Nice job!\n"
+
