@@ -3,7 +3,7 @@
 PSQL="psql --username=freecodecamp --dbname=guessing -t --no-align -c"
 
 #Validate username
-read -p "Enter your username:" USERNAME
+read -p "Enter your username: " USERNAME
 RESULT=$($PSQL "SELECT username FROM users WHERE username='$USERNAME'")
 if [[ -z $RESULT ]]; then
     #Not found
@@ -31,5 +31,6 @@ while [ "$GUESS" -ne "$RAN_NUM" ]; do
     (( COUNT++ ))
 done
 
+$PSQL "INSERT INTO users (username, guesses) VALUES ('$USERNAME', '$COUNT')"
 echo -e "You guessed it in $COUNT tries. The secret number was $RAN_NUM. Nice job!\n"
 
