@@ -35,6 +35,7 @@ while true; do
 
     #Check guess
     if [ "$GUESS" -eq "$RAN_NUM" ]; then
+        echo "You guessed it in $COUNT tries. The secret number was $RAN_NUM. Nice job!"
         break
     elif [ "$GUESS" -gt "$RAN_NUM" ]; then
         (( COUNT++ ))
@@ -45,6 +46,6 @@ while true; do
     fi
 done
 
-$PSQL "INSERT INTO users (username, guesses) VALUES ('$USERNAME', '$COUNT')"
-echo -e "You guessed it in $COUNT tries. The secret number was $RAN_NUM. Nice job!"
+$PSQL "INSERT INTO users (username, guesses) VALUES ('$USERNAME', '$COUNT')" > /dev/null
+
 exit 0
