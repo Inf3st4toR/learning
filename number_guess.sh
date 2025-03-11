@@ -12,9 +12,9 @@ if [[ -z $RESULT ]]; then
     echo "Welcome, $USERNAME! It looks like this is your first time here."
 else
     #Found
-    OLD_COUNT=$($PSQL "SELECT COUNT(*) FROM users WHERE username='$USERNAME'")
+    GAMES_PLAYED=$($PSQL "SELECT COUNT(*) FROM users WHERE username='$USERNAME'")
     BEST_COUNT=$($PSQL "SELECT MIN(guesses) FROM users WHERE username='$USERNAME'")
-    echo "Welcome back, $USERNAME! You have played $OLD_COUNT games, and your best game took $BEST_COUNT guesses."
+    echo "Welcome back, $USERNAME! You have played $GAMES_PLAYED games, and your best game took $BEST_COUNT guesses."
 fi
 
 #Guess number
@@ -47,4 +47,4 @@ done
 
 $PSQL "INSERT INTO users (username, guesses) VALUES ('$USERNAME', '$COUNT')"
 echo -e "You guessed it in $COUNT tries. The secret number was $RAN_NUM. Nice job!"
-
+exit 0
