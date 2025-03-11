@@ -3,7 +3,9 @@
 PSQL="psql --username=freecodecamp --dbname=guessing -t --no-align -c"
 
 #Validate username
-read -p "Enter your username:" USERNAME
+echo "Enter your username:"
+read USERNAME
+
 RESULT=$($PSQL "SELECT username FROM users WHERE username='$USERNAME'")
 if [[ -z $RESULT ]]; then
     #Not found
@@ -18,19 +20,29 @@ fi
 #Guess number
 RAN_NUM=$((($RANDOM % 1000)+1))
 COUNT=1
-echo -e "\nGuess the secret number between 1 and 1000:"
-read GUESS
+GUESS=0
+echo "Guess the secret number between 1 and 1000:"
 
 #Guess Loop
-while [ "$GUESS" -ne "$RAN_NUM" ]; do
-    if [ "$GUESS" -gt "$RAN_NUM" ]; then
-        echo -e "\nIt's lower than that, guess again:"
-        read GUESS
-    else
-        echo -e "\nIt's higher than that, guess again:"
-        read GUESS
+while true; do
+    read GUESS
+
+    #Validate
+    if ! [[ "$GUESS" =~ ^-?[0-9]+$ ]]; then
+        echo "That is not an integer, guess again:"
+        continue
     fi
-    (( COUNT++ ))
+
+    #Check guess
+    if [ "$GUESS" -eq "$RAN_NUM" ]; then
+        break
+    elif [ "$GUESS" -gt "$RAN_NUM" ]; then
+        (( COUNT++ ))
+        echo "It's lower than that, guess again:"
+    else
+        (( COUNT++ ))
+        echo "It's higher than that, guess again:"
+    fi
 done
 
 $PSQL "INSERT INTO users (username, guesses) VALUES ('$USERNAME', '$COUNT')"
